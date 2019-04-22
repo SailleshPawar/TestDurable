@@ -18,6 +18,12 @@ namespace TestDurable
     }
     public static class Function1
     {
+
+        private static SqlConnection con = new SqlConnection();
+
+        //http client instance
+        private static HttpClient client = new HttpClient();
+
         [FunctionName("Function1")]
         public static async Task<List<string>> RunOrchestrator(
             [OrchestrationTrigger] DurableOrchestrationContext context)
@@ -44,7 +50,9 @@ namespace TestDurable
 
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
-                SqlConnection connection = new SqlConnection("");
+
+                //don't instantiate inside sqlconnection use static connection one for all
+                SqlConnection connection = new SqlConnection("Server=tcp:dev-test-perf.database.windows.net;Initial Catalog=TestDB;Persist Security Info=False;User ID=Saillesh;Password=Angular@2018;MultipleActiveResultSets=True;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
                 SqlCommand cmd = new SqlCommand();
                 connection.Open();
                 cmd.Connection = connection;
